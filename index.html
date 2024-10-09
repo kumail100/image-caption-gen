@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Caption Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input { margin-top: 20px; }
+        img { margin-top: 20px; max-width: 500px; }
+    </style>
+</head>
+<body>
+    <h1>AI Image Caption Generator</h1>
+    <input type="file" id="fileInput">
+    <button onclick="uploadImage()">Generate Caption</button>
+
+    <div id="result"></div>
+
+    <script>
+        function uploadImage() {
+            const fileInput = document.getElementById('fileInput').files[0];
+            const formData = new FormData();
+            formData.append('file', fileInput);
+
+            fetch('http://localhost:5000/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `<p>${data.caption}</p><img src="${URL.createObjectURL(fileInput)}" alt="Uploaded Image">`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
